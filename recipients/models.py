@@ -12,7 +12,7 @@ class Recipient(models.Model):
         verbose_name="Получатель рассылки",
         help_text="Введите ФИО получателя рассылки",
     )
-    description = models.TextField()
+    description = models.TextField(blank=True,)
 
     def __str__(self):
         return self.email

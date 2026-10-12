@@ -1,0 +1,35 @@
+{% extends 'recipients/base.html' %}
+{% block title %}Ban de Rol{% endblock %}
+{% block content %}
+<div class="container">
+    <p>
+        <a class="btn btn-lg btn-block btn-outline-primary" href="#">Добавить нового получателя рассылок</a>
+    </p>
+    <div class="row text-center">
+        {% for recipient in object_list %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">{{ recipient.name }}</h4>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title pricing-card-title">{{ recipient.email }}</h4>
+                    <p class="list-unstyled mt-3 mb-4 text-start m-3">{{ recipient.description|truncatechars:100 }}</p>
+                    <div class="d-grid gap-2">
+                        <a class="btn btn-lg btn-outline-primary" href="#">
+                            Посмотреть
+                        </a>
+                        <a class="btn btn-primary" href="#">
+                            Редактировать
+                        </a>
+                        <a class="btn btn-danger" href="#">
+                            Удалить
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

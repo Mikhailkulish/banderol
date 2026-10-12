@@ -1,3 +1,9 @@
-from django.shortcuts import render
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-# Create your views here.
+from recipients.models import Recipient
+
+
+class RecipientListView(ListView):
+    model = Recipient
+    template_name = 'recipients/recipient_list.html'
+

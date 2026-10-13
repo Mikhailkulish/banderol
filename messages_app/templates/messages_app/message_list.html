@@ -1,0 +1,34 @@
+{% extends 'messages_app/base.html' %}
+{% block title %}Сообщения Ban de Rol{% endblock %}
+{% block content %}
+<div class="container">
+    <p>
+        <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'messages_app:message_create' %}">Добавить новое сообщение</a>
+    </p>
+    <div class="row text-center">
+        {% for message in object_list %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">{{ message.subject }}</h4>
+                </div>
+                <div class="card-body">
+                    <p class="list-unstyled mt-3 mb-4 text-start m-3">{{ message.body|truncatechars:100 }}</p>
+                    <div class="d-grid gap-2">
+                        <a class="btn btn-lg btn-outline-primary" href="{% url 'messages_app:message_detail' message.pk %}">
+                            Посмотреть
+                        </a>
+                        <a class="btn btn-primary" href="{% url 'messages_app:message_update' message.pk %}">
+                            Редактировать
+                        </a>
+                        <a class="btn btn-danger" href="{% url 'messages_app:message_delete' message.pk %}">
+                            Удалить
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

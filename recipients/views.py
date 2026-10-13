@@ -20,3 +20,12 @@ class RecipientCreateView(CreateView):
     success_url = reverse_lazy('recipients:recipient_list')
 
 
+class RecipientUpdateView(UpdateView):
+    model = Recipient
+    form_class = RecipientForm
+    success_url = reverse_lazy('recipients:recipient_list')
+
+
+class RecipientDeleteView(DeleteView):
+    model = Recipient
+    success_url = reverse_lazy('recipients:recipient_list')

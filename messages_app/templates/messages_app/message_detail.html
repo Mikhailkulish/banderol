@@ -1,0 +1,8 @@
+{% extends 'messages_app/base.html' %}
+{% block title %}Детальная информация о сообщении{% endblock %}
+{% block content %}
+<h1 class="mt-5 mb-4">Детальная информация о сообщении</h1>
+<p>Тема сообщения: {{ object.subject }}</p>
+<p>Содержание сообщения: {{ object.body }}</p>
+    <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'messages_app:message_list' %}">Назад</a>
+{% endblock %}

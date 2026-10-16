@@ -1,0 +1,11 @@
+{% extends 'mailings/base.html' %}
+{% block title %}Детальная информация о рассылке{% endblock %}
+{% block content %}
+<h1 class="mt-5 mb-4">Детальная информация о рассылке</h1>
+<p>Дата и время начала отправки: {{ object.start_time }}</p>
+<p>Дата и время окончания отправки: {{ object.end_time }}</p>
+<p>Статус: {{ object.status }}</p>
+<p>Сообщение: {{ object.message }}</p>
+<p>Получатели: {{ object.recipients.all|join:", " }}</p>
+    <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'mailings:mailing_list' %}">Назад</a>
+{% endblock %}

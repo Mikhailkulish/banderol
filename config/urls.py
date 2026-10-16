@@ -7,6 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('recipients.urls', namespace='recipient')),
     path('message/', include('messages_app.urls', namespace='message')),
+    path('mailings/', include('mailings.urls', namespace='mailings')),
 ]
 
 if settings.DEBUG:

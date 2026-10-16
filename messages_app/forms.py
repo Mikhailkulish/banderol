@@ -12,7 +12,7 @@ class MessageForm(forms.ModelForm):
         super(MessageForm, self).__init__(*args, **kwargs)
         self.fields['subject'].widget.attrs.update({
             'class': 'form-control',
-            'placeholder': 'Введите тему собщения'
+            'placeholder': 'Введите тему сообщения'
         })
 
         self.fields['body'].widget.attrs.update({

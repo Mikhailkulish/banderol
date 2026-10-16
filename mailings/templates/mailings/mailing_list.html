@@ -1,0 +1,37 @@
+{% extends 'mailings/base.html' %}
+{% block title %}Рассылки Ban de Rol{% endblock %}
+{% block content %}
+<div class="container">
+    <p>
+        <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'mailings:mailing_create' %}">Добавить новую рассылку</a>
+    </p>
+    <div class="row text-center">
+        {% for mailing in object_list %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">{{ mailing.message }}</h4>
+                </div>
+                <div class="card-body">
+                    <p class="list-unstyled mt-3 mb-2 text-start m-3">{{ mailing.start_time }}</p>
+                    <p class="list-unstyled mt-2 mb-4 text-start m-3">{{ mailing.end_time }}</p>
+                    <p class="list-unstyled mt-3 mb-4 text-start m-3">{{ mailing.recipients.all|join:", " }}</p>
+                    <p class="list-unstyled mt-3 mb-4 text-start m-3">{{ mailing.status }}</p>
+                    <div class="d-grid gap-2">
+                        <a class="btn btn-lg btn-outline-primary" href="{% url 'mailings:mailing_detail' mailing.pk %}">
+                            Посмотреть
+                        </a>
+                        <a class="btn btn-primary" href="{% url 'mailings:mailing_update' mailing.pk %}">
+                            Редактировать
+                        </a>
+                        <a class="btn btn-danger" href="{% url 'mailings:mailing_delete' mailing.pk %}">
+                            Удалить
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -8,7 +8,7 @@ app_name = RecipientsConfig.name
 
 
 urlpatterns = [
-    path('', RecipientListView.as_view(), name='recipient_list'),
+    path('recipient/', RecipientListView.as_view(), name='recipient_list'),
     path('recipient/<int:pk>', RecipientDetailView.as_view(), name='recipient_detail'),
     path('create/', RecipientCreateView.as_view(), name='recipient_create'),
     path('update/<int:pk>', RecipientUpdateView.as_view(), name='recipient_update'),

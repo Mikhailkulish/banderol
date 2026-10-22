@@ -1,11 +1,90 @@
 {% extends 'mailings/base.html' %}
 {% block title %}Детальная информация о рассылке{% endblock %}
+
 {% block content %}
-<h1 class="mt-5 mb-4">Детальная информация о рассылке</h1>
-<p>Дата и время начала отправки: {{ object.start_time }}</p>
-<p>Дата и время окончания отправки: {{ object.end_time }}</p>
-<p>Статус: {{ object.status }}</p>
-<p>Сообщение: {{ object.message }}</p>
-<p>Получатели: {{ object.recipients.all|join:", " }}</p>
-    <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'mailings:mailing_list' %}">Назад</a>
+<div class="container mt-5">
+    <h1 class="mb-4">Детальная информация о рассылке</h1>
+
+    <!-- Блок с основной информацией -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <p><strong>Дата и время начала:</strong> {{ object.start_time|date:"d.m.Y H:i" }}</p>
+            <p><strong>Дата и время окончания:</strong> {{ object.end_time|date:"d.m.Y H:i" }}</p>
+
+            <p>
+                <strong>Статус:</strong>
+                {% if object.status == 'Создана' %}
+                    <span class="badge bg-info text-dark">{{ object.status }}</span>
+                {% elif object.status == 'Запущена' %}
+                    <span class="badge bg-success">{{ object.status }}</span>
+                {% elif object.status == 'Завершена' %}
+                    <span class="badge bg-secondary">{{ object.status }}</span>
+                {% else %}
+                    {{ object.status }}
+                {% endif %}
+            </p>
+
+            <p><strong>Сообщение:</strong> {{ object.message.subject }}</p>
+            <p><strong>Получатели:</strong> {{ object.recipients.all|join:", "|default:"Нет получателей" }}</p>
+
+            <!-- Статистика по попыткам -->
+            <p class="mt-4">
+                <strong>Статистика отправки:</strong>
+                <span class="text-success">Успешно: {{ object.success_count }}</span> |
+                <span class="text-danger">Ошибок: {{ object.failed_count }}</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- Кнопки управления -->
+    <div class="mb-5">
+        <a class="btn btn-outline-primary" href="{% url 'mailings:mailing_list' %}">Назад к списку</a>
+
+        <!-- Кнопку "Запустить" показываем только если статус "Запущена" -->
+        {% if object.status == 'Запущена' %}
+        <form method="post" action="{% url 'mailings:mailing_send' object.pk %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success">Запустить рассылку</button>
+        </form>
+        {% endif %}
+    </div>
+
+    <hr>
+
+    <!-- Журнал попыток -->
+    <h3 class="mb-3">История попыток отправки</h3>
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Дата и время</th>
+                <th>Получатель</th>
+                <th>Статус</th>
+                <th>Ответ сервера (ошибка)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for attempt in object.attempts.all %}
+            <tr>
+                <td>{{ attempt.attempt_time|date:"d.m.Y H:i:s" }}</td>
+                <td>{{ attempt.recipient.email|default:"-" }}</td>
+                <td>
+                    {% if attempt.status == 'Успешно' %}
+                        <span class="badge bg-success">{{ attempt.status }}</span>
+                    {% else %}
+                        <span class="badge bg-danger">{{ attempt.status }}</span>
+                    {% endif %}
+                </td>
+                <td class="text-danger small">{{ attempt.server_response|default:"-" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center text-muted py-4">
+                    Попыток отправки еще не было.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
 {% endblock %}

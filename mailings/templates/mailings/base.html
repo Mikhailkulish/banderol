@@ -13,7 +13,9 @@
     <div class="row align-items-center mb-3 border-bottom">
         <div class="col-9">
             <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-white  box-shadow">
-                <h5 class="my-0 mr-md-auto font-weight-normal">Ban de Rol</h5>
+                <h5 class="my-0 mr-md-auto font-weight-normal">
+                    <a href="{% url 'main:main' %}" class="text-decoration-none text-dark">Ban de Rol</a>
+                </h5>
                 {% include 'recipients/includes/inc_menu.html' %}
             </div>
         </div>

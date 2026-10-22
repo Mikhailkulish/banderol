@@ -1,8 +1,12 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views import View
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
 
 from mailings.forms import MailingForm
 from mailings.models import Mailing
+from mailings.services import send_mailing
 
 
 class MailingListView(ListView):
@@ -30,3 +34,19 @@ class MailingDeleteView(DeleteView):
     model = Mailing
     form_class = MailingForm
     success_url = reverse_lazy('mailings:mailing_list')
+
+
+class MailingSendView(View):
+    def post(self, request, pk):
+        mailing = get_object_or_404(Mailing, pk=pk)
+
+        try:
+            result = send_mailing(mailing)
+            messages.success(
+                request,
+                f"Рассылка запущена! Успешно: {result['success']}, Ошибок: {result['failed']}"
+            )
+        except ValueError as e:
+            messages.error(request, str(e))
+
+        return redirect('mailings:mailing_detail', pk=pk)

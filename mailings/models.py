@@ -73,3 +73,48 @@ class Mailing(models.Model):
             raise ValidationError({
                 'end_time': 'Дата окончания должна быть позже даты начала.'
             })
+
+
+class MailingAttempt(models.Model):
+    STATUS_SUCCESS = 'Успешно'
+    STATUS_FAILED = 'Не успешно'
+
+    STATUS_CHOICES = [
+        (STATUS_SUCCESS, 'Успешно'),
+        (STATUS_FAILED, 'Не успешно'),
+    ]
+
+    mailing = models.ForeignKey(
+        Mailing,
+        on_delete=models.CASCADE,
+        related_name='attempts',
+        verbose_name='Рассылка',
+    )
+    recipient = models.ForeignKey(
+        'recipients.Recipient',
+        on_delete=models.CASCADE,
+        verbose_name='Получатель',
+        null=True, blank=True, # На случай, если ошибка произошла до определения получателя
+    )
+    attempt_time = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Дата и время попытки',
+    )
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        verbose_name='Статус',
+    )
+    server_response = models.TextField(
+        blank=True,
+        verbose_name='Ответ сервера',
+        help_text='Текст ошибки или ответ почтового сервера',
+    )
+
+    class Meta:
+        verbose_name = 'Попытка отправки'
+        verbose_name_plural = 'Попытки отправки'
+        ordering = ['-attempt_time']
+
+    def __str__(self):
+        return f'Попытка {self.pk} для рассылки {self.mailing.pk} - {self.status}'

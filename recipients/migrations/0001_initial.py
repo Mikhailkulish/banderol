@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 (
-                    "name",
+                    "main",
                     models.CharField(
                         help_text="Введите ФИО получателя рассылки",
                         max_length=200,

@@ -9,6 +9,7 @@ urlpatterns = [
     path('recipients/', include('recipients.urls', namespace='recipient')),
     path('message/', include('messages_app.urls', namespace='message')),
     path('mailings/', include('mailings.urls', namespace='mailings')),
+    path('users/', include('users.urls', namespace='users')),
 ]
 
 if settings.DEBUG:

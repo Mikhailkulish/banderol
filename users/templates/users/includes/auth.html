@@ -1,0 +1,45 @@
+{% load my_tags %}
+
+<div class="col-3 d-flex align-items-center justify-content-center h-100">
+    <div class="dropdown">
+        <button class="btn btn-sm btn-outline-dark dropdown-toggle d-flex align-items-center"
+                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {% if user.is_authenticated %}
+            {% if user.avatar %}
+            <img src="{{ user.avatar|media_filter }}" alt="Аватар"
+                 class="rounded-circle me-2" width="30" height="30">
+            {% endif %}
+            <span class="fw-bold">{{ user.email }}</span>
+            {% else %}
+            <span class="fw-bold">Гость</span>
+            {% endif %}
+        </button>
+
+        {% if user.is_authenticated %}
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+                <a class="dropdown-item" href="{% url 'users:update' user.pk %}">
+                    Профиль
+                </a>
+            </li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            <li>
+                <form method="post" action="{% url 'users:logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="dropdown-item">Выход</button>
+                </form>
+            </li>
+        </ul>
+        {% else %}
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="{% url 'users:login' %}">Вход</a></li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="{% url 'users:register' %}">Регистрация</a></li>
+        </ul>
+        {% endif %}
+    </div>
+</div>

@@ -21,12 +21,14 @@
                         <a class="btn btn-lg btn-outline-primary" href="{% url 'mailings:mailing_detail' mailing.pk %}">
                             Посмотреть
                         </a>
+                        {% if mailing.owner == user %}
                         <a class="btn btn-primary" href="{% url 'mailings:mailing_update' mailing.pk %}">
                             Редактировать
                         </a>
                         <a class="btn btn-danger" href="{% url 'mailings:mailing_delete' mailing.pk %}">
                             Удалить
                         </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

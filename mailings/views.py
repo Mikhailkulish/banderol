@@ -3,6 +3,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.views import View
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from mailings.forms import MailingForm
 from mailings.models import Mailing
@@ -14,14 +15,18 @@ class MailingListView(ListView):
     template_name = 'mailings/mailing_list.html'
 
 
-class MailingDetailView(DetailView):
+class MailingDetailView(LoginRequiredMixin, DetailView):
     model = Mailing
 
 
-class MailingCreateView(CreateView):
+class MailingCreateView(LoginRequiredMixin, CreateView):
     model = Mailing
     form_class = MailingForm
     success_url = reverse_lazy('mailings:mailing_list')
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
 
 
 class MailingUpdateView(UpdateView):

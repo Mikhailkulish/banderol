@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 
 class Message(models.Model):
@@ -10,6 +11,13 @@ class Message(models.Model):
     body = models.TextField(
         verbose_name="Содержание сообщения",
         help_text="Введите сообщение"
+    )
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='messages',
+        verbose_name='Владелец',
+        null=True, blank=True
     )
 
     def __str__(self):

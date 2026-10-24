@@ -19,12 +19,14 @@
                         <a class="btn btn-lg btn-outline-primary" href="{% url 'recipients:recipient_detail' recipient.pk %}">
                             Посмотреть
                         </a>
+                        {% if recipient.owner == user %}
                         <a class="btn btn-primary" href="{% url 'recipients:recipient_update' recipient.pk %}">
                             Редактировать
                         </a>
                         <a class="btn btn-danger" href="{% url 'recipients:recipient_delete' recipient.pk %}">
                             Удалить
                         </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

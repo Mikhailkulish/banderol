@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.conf import settings
 
 
 class Mailing(models.Model):
@@ -38,6 +39,13 @@ class Mailing(models.Model):
         'recipients.Recipient',
         related_name='mailings',
         verbose_name='Получатели',
+    )
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='mailings',
+        verbose_name='Владелец',
+        null=True, blank=True
     )
 
     class Meta:

@@ -18,12 +18,14 @@
                         <a class="btn btn-lg btn-outline-primary" href="{% url 'messages_app:message_detail' message.pk %}">
                             Посмотреть
                         </a>
+                        {% if message.owner == user %}
                         <a class="btn btn-primary" href="{% url 'messages_app:message_update' message.pk %}">
                             Редактировать
                         </a>
                         <a class="btn btn-danger" href="{% url 'messages_app:message_delete' message.pk %}">
                             Удалить
                         </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

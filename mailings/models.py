@@ -2,6 +2,9 @@ from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.conf import settings
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+from django.core.cache import cache
 
 
 class Mailing(models.Model):
@@ -51,6 +54,11 @@ class Mailing(models.Model):
     class Meta:
         verbose_name = 'Рассылка'
         verbose_name_plural = 'Рассылки'
+
+        permissions = [
+            ("can_disable_mailing", "Может отключать рассылки"),
+        ]
+
 
     def __str__(self):
         return f'Рассылка #{self.pk} — {self.message.subject}'
@@ -126,3 +134,14 @@ class MailingAttempt(models.Model):
 
     def __str__(self):
         return f'Попытка {self.pk} для рассылки {self.mailing.pk} - {self.status}'
+
+
+@receiver([post_save, post_delete], sender=Mailing)
+def clear_dashboard_cache_on_mailing(sender, instance, **kwargs):
+    if instance.owner:
+        cache.delete(f"dashboard_stats_{instance.owner.id}")
+
+@receiver(post_save, sender=MailingAttempt)
+def clear_dashboard_cache_on_attempt(sender, instance, **kwargs):
+    if instance.mailing and instance.mailing.owner:
+        cache.delete(f"dashboard_stats_{instance.mailing.owner.id}")

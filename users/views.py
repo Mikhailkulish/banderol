@@ -13,6 +13,8 @@ from users.models import User
 logger = logging.getLogger(__name__)
 
 
+
+
 class UserCreateView(CreateView):
     model = User
     form_class = UserRegisterForm
@@ -51,3 +53,5 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+

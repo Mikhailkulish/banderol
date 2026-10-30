@@ -1,0 +1,35 @@
+{% extends 'main/base.html' %}
+{% load my_tags %}
+{% block title %}Профиль пользователя{% endblock %}
+
+{% block content %}
+<h1 class="mt-5 mb-4">Профиль пользователя</h1>
+{% if object.avatar %}
+    <p>Текущий аватар:</p>
+    <img src="{{ object.avatar.url }}" alt="{{ object.email }}"
+         style="max-width: 300px; border-radius: 8px;">
+{% else %}
+    <p>Аватар не загружен</p>
+{% endif %}
+<hr>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="mb-3">
+            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}
+                <div class="form-text">{{ field.help_text }}</div>
+            {% endif %}
+            {% for error in field.errors %}
+                <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-lg btn-outline-primary">Сохранить изменения</button>
+</form>
+<form method="post" action="{% url 'users:logout' %}" class="mt-2">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-lg btn-outline-secondary">Выйти</button>
+</form>
+{% endblock %}

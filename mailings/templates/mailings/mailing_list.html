@@ -1,0 +1,78 @@
+{% extends 'mailings/base.html' %}
+{% block title %}Рассылки Ban de Rol{% endblock %}
+
+{% block content %}
+<div class="container">
+    <p>
+        <a class="btn btn-lg btn-block btn-outline-primary mb-4" href="{% url 'mailings:mailing_create' %}">
+            Добавить новую рассылку
+        </a>
+    </p>
+
+    <div class="row text-center">
+        {% for mailing in object_list %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">{{ mailing.message.subject }}</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Блок с информацией -->
+                    <div class="text-start m-3">
+                        <p class="mb-1"><strong>Начало:</strong> {{ mailing.start_time|date:"d.m.Y H:i" }}</p>
+                        <p class="mb-1"><strong>Конец:</strong> {{ mailing.end_time|date:"d.m.Y H:i" }}</p>
+
+                        <p class="mb-1 mt-2">
+                            <strong>Получатели:</strong><br>
+                            <small class="text-muted">{{ mailing.recipients.all|join:", "|default:"Не выбраны" }}</small>
+                        </p>
+
+                        <p class="mb-3">
+                            <strong>Статус:</strong>
+                            {% if mailing.status == 'Запущена' %}
+                                <span class="badge bg-success">{{ mailing.status }}</span>
+                            {% elif mailing.status == 'Завершена' %}
+                                <span class="badge bg-secondary">{{ mailing.status }}</span>
+                            {% else %}
+                                <span class="badge bg-info text-dark">{{ mailing.status }}</span>
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <!-- Блок с кнопками -->
+                    <div class="d-grid gap-2">
+                        <a class="btn btn-outline-primary" href="{% url 'mailings:mailing_detail' mailing.pk %}">
+                            Посмотреть
+                        </a>
+
+                        <!-- Владелец рассылки может редактировать и удалять -->
+                        {% if mailing.owner == user %}
+                        <a class="btn btn-primary" href="{% url 'mailings:mailing_update' mailing.pk %}">
+                            Редактировать
+                        </a>
+                        <a class="btn btn-danger" href="{% url 'mailings:mailing_delete' mailing.pk %}">
+                            Удалить
+                        </a>
+                        {% endif %}
+
+                        <!-- Менеджер может принудительно отключить -->
+                        {% if perms.mailings.can_disable_mailing %}
+                            <form method="post" action="{% url 'mailings:mailing_disable' mailing.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-warning w-100" onclick="return confirm('Вы уверены, что хотите принудительно отключить эту рассылку?')">
+                                    Отключить
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 mt-5">
+            <h4 class="text-muted">Пока нет ни одной рассылки. Создайте первую!</h4>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

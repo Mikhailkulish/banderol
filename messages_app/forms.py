@@ -1,0 +1,21 @@
+from django import forms
+
+from messages_app.models import Message
+
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['subject', 'body',]
+
+    def __init__(self, *args, **kwargs):
+        super(MessageForm, self).__init__(*args, **kwargs)
+        self.fields['subject'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Введите тему сообщения'
+        })
+
+        self.fields['body'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Введите содержание сообщения'
+        })

@@ -1,0 +1,9 @@
+{% extends 'recipients/base.html' %}
+{% block title %}Детальная информация о получателе рассылок{% endblock %}
+{% block content %}
+<h1 class="mt-5 mb-4">Детальная информация о получателе рассылок</h1>
+<p>Фамилия, имя, отчество: {{ object.name }}</p>
+<p>Адрес электронной почты: {{ object.email }}</p>
+<p>Описание: {{ object.description }}</p>
+    <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'recipients:recipient_list' %}">Назад</a>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">Дашборд сервиса рассылок</h1>
+
+    <!-- БЛОК 1: Общая статистика по объектам -->
+    <div class="row text-center mt-5">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-primary">
+                <div class="card-body">
+                    <h1 class="display-4 text-primary">{{ total_mailings }}</h1>
+                    <h5 class="card-title mt-3">Всего рассылок</h5>
+                    <p class="text-muted">Общее количество созданных рассылок</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-success">
+                <div class="card-body">
+                    <h1 class="display-4 text-success">{{ active_mailings }}</h1>
+                    <h5 class="card-title mt-3">Активные рассылки</h5>
+                    <p class="text-muted">Рассылки, которые сейчас в процессе</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-info">
+                <div class="card-body">
+                    <h1 class="display-4 text-info">{{ total_recipients }}</h1>
+                    <h5 class="card-title mt-3">Получатели</h5>
+                    <p class="text-muted">Общее количество клиентов в базе</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- БЛОК 2: Статистика отправок (Пункт 8 задания) -->
+    {% if user.is_authenticated %}
+    <h3 class="mt-5 mb-3 text-center">Статистика отправок</h3>
+    <div class="row text-center">
+        <div class="col-md-4">
+            <div class="card bg-light mb-3 shadow-sm">
+                <div class="card-body">
+                    <h2 class="text-secondary display-5">{{ total_sent_messages }}</h2>
+                    <p class="mb-0 fw-bold">Всего отправлено писем</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-light mb-3 shadow-sm">
+                <div class="card-body">
+                    <h2 class="text-success display-5">{{ successful_attempts }}</h2>
+                    <p class="mb-0 fw-bold">Успешные попытки</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-light mb-3 shadow-sm">
+                <div class="card-body">
+                    <h2 class="text-danger display-5">{{ failed_attempts }}</h2>
+                    <p class="mb-0 fw-bold">Неуспешные попытки</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Кнопки быстрого доступа -->
+    <div class="text-center mt-4 mb-5">
+        <a href="{% url 'mailings:mailing_list' %}" class="btn btn-outline-primary btn-lg mx-2">Перейти к рассылкам</a>
+        <a href="{% url 'recipients:recipient_list' %}" class="btn btn-outline-secondary btn-lg mx-2">Перейти к получателям</a>
+    </div>
+</div>
+{% endblock %}
